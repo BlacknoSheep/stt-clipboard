@@ -1,0 +1,51 @@
+#left-column {
+  max-width: 600px;
+}
+
+.audio-container {
+  height: 250px;
+  font-size: 20px;
+}
+
+.audio-container .icon-button {
+  width: 80px;
+  height: 80px;
+}
+
+.audio-container .component-wrapper {
+  margin-top: auto;
+  margin-bottom: 0px;
+}
+
+/* .record-button,
+.stop-button{
+  width: 100px;
+  height: 80px;
+} */
+
+.text-box textarea{
+  font-size: 30px;
+}
+
+.input-audio .record-button,
+.input-audio .stop-button,
+.input-audio .icon-button{
+  width: 100px;
+  height: 100px;
+}
+
+.input-language input[type=radio]{
+  width: 30px;
+  height: 30px;
+  font-size: 30px;
+}
+
+.input-language .wrap span{
+  font-size: 30px;
+  height: 30px;
+  line-height: 30px;
+}
+
+#examples{
+  font-size: 30px;
+}
