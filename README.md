@@ -19,9 +19,9 @@ uv sync
 ## 使用
 
 ```bash
-uv run main.py
+uv run app.py
 ```
 
 启动后打开浏览器访问 `http://localhost:7860`。
 
-推荐配合 NVIDIA Broadcast 使用。
+推荐配合 NVIDIA Broadcast 去噪使用。

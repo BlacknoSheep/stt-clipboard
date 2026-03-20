@@ -4,7 +4,7 @@ import numpy as np
 import opencc
 import librosa
 
-from config import config, logger, LANGUAGES, EXAMPLES
+from config import config, logger, LANGUAGES, load_examples
 from stt import FasterWhisper
 from vad import SileroVAD
 
@@ -46,6 +46,10 @@ def process_audio(
     copy_to_clipboard(text)
     return text
 
+def update_examples_fn():
+    examples = load_examples()
+    examples = [[x] for x in examples]
+    return gr.Dataset(samples=examples)
 
 def create_app() -> gr.Blocks:
     with gr.Blocks(title="STT Clipboard") as app:
@@ -55,6 +59,9 @@ def create_app() -> gr.Blocks:
                 stt_text = gr.Textbox(
                     placeholder="(空)", show_label=False, elem_classes="text-box"
                 )
+
+                copy_button = gr.Button(value="复制", variant="primary")
+                copy_button.click(fn=copy_to_clipboard, inputs=[stt_text])
 
                 input_audio = gr.Audio(
                     sources="microphone",
@@ -79,6 +86,16 @@ def create_app() -> gr.Blocks:
                     label="VAD 阈值",
                 )
 
+                input_audio.start_recording(fn=lambda: None, outputs=[stt_text])
+
+                input_audio.stop_recording(
+                    fn=process_audio,
+                    inputs=[input_audio, input_language, input_threshold],
+                    outputs=[stt_text],
+                )
+
+                update_examples = gr.Button(value="更新预制文本", variant="primary")
+
             with gr.Column(elem_id="right-column"):
                 edit_text = gr.Textbox(
                     placeholder="(空)", show_label=False, elem_classes="text-box"
@@ -89,37 +106,39 @@ def create_app() -> gr.Blocks:
                     paste_button = gr.Button(value="粘贴", variant="primary")
                     clear_button = gr.Button(value="清空", variant="primary")
 
+                    copy_button.click(
+                        fn=lambda text: pyperclip.copy(text), inputs=[edit_text]
+                    )
+
+                    paste_button.click(
+                        fn=lambda x: x + pyperclip.paste(),
+                        inputs=[edit_text],
+                        outputs=[edit_text],
+                    )
+
+                    clear_button.click(fn=lambda: "", outputs=[edit_text])
+
                 # 预制文本
-                gr.Examples(
-                    examples=EXAMPLES,
+                examples = gr.Examples(
+                    examples=load_examples(),
                     inputs=edit_text,
+                    label="预制文本",
                     fn=lambda x: copy_to_clipboard(x),
                     run_on_click=True,
                     elem_id="examples",
+                    examples_per_page=100,
                 )
 
-        input_audio.start_recording(fn=lambda: None, outputs=[stt_text])
+                update_examples.click(
+                    fn=update_examples_fn,
+                    outputs=examples.dataset,
+                )
 
-        input_audio.stop_recording(
-            fn=process_audio,
-            inputs=[input_audio, input_language, input_threshold],
-            outputs=[stt_text],
-        )
-
-        copy_button.click(fn=lambda text: pyperclip.copy(text), inputs=[edit_text])
-
-        paste_button.click(
-            fn=lambda x: x + pyperclip.paste(),
-            inputs=[edit_text],
-            outputs=[edit_text],
-        )
-
-        clear_button.click(fn=lambda: "", outputs=[edit_text])
     return app
 
 
 def main() -> None:
-    # _init()
+    _init()
 
     with open("script.js", "r", encoding="utf-8") as f:
         SCRIPT = f.read()

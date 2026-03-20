@@ -1,7 +1,7 @@
 from faster_whisper import WhisperModel
 import numpy as np
 from pydantic import BaseModel
-from typing import Union, List, Optional
+from typing import Union, List
 
 
 class FasterWhisperConfig(BaseModel):

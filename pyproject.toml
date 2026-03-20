@@ -15,7 +15,7 @@ dependencies = [
   "opencc",
   "pyperclip",
   "torchcodec",
-  "librosa0",
+  "librosa",
 ]
 
 

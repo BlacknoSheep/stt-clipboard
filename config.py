@@ -1,6 +1,7 @@
 import logging
 from stt import FasterWhisperConfig
 from vad import SileroVADConfig
+import json
 
 
 class Config:
@@ -27,7 +28,7 @@ class Config:
 config = Config()
 
 logger = logging.getLogger("stt_clipboard")
-logger.setLevel(logging.DEBUG)  # 设置你自己的代码显示 DEBUG 级别
+logger.setLevel(logging.DEBUG)
 console_handler = logging.StreamHandler()
 console_handler.setLevel(config.log_level)
 formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
@@ -36,15 +37,7 @@ logger.addHandler(console_handler)
 
 LANGUAGES = ["auto", "zh", "ja", "en"]
 
-EXAMPLES = [
-    "你好",
-    "我是中国人",
-    "拜拜喵",
-    "呼呼喵",
-    "关注永雏塔菲喵",
-    "晚安喵",
-    "こんにちは",
-    "おやすみなさい",
-    "Hello",
-    "Bye",
-]
+def load_examples():
+    with open("examples.json", "r", encoding="utf-8") as f:
+        examples = list(json.load(f))
+    return examples
