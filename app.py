@@ -5,20 +5,11 @@ import opencc
 import librosa
 
 from config import config, logger, LANGUAGES, load_examples
-from stt import FasterWhisper
-from vad import SileroVAD
+from src.Transcriber import Transcriber
+from src.vad import SileroVAD
 
-stt: FasterWhisper
-vad_detector: SileroVAD
-
-
-# 延迟加载
-def _init():
-    global stt, vad_detector, SCRIPT, CSS
-
-    stt = FasterWhisper(config=config.faster_whisper_config)
-    vad_detector = SileroVAD(config=config.silero_vad_config)
-    logger.info("加载 stt 模型成功")
+transcriber = Transcriber(model_name=config.model_name, device=config.device)
+vad_detector = SileroVAD()
 
 
 def copy_to_clipboard(text: str):
@@ -34,22 +25,24 @@ def process_audio(
     audio = audio.astype(np.float32) / 32768.0
     audio = librosa.resample(audio, orig_sr=sr, target_sr=config.samplerate)
 
-    config.silero_vad_config.threshold = vad_threshold
-    timestamps = vad_detector.get_speech_timestamps(audio, config.silero_vad_config)
+    config.silero_vad_threshold = vad_threshold
+    timestamps = vad_detector.get_speech_timestamps(audio, config.silero_vad_threshold)
     if len(timestamps) == 0:
         logger.info("没有检测到语音")
         return ""
     audio = audio[timestamps[0][0] : timestamps[-1][1]]
-    text = stt.transcribe(audio, language=language)
+    text = transcriber.transcribe(audio, language=language)
     if language == "zh":
         text = opencc.OpenCC("t2s").convert(text)
     copy_to_clipboard(text)
     return text
 
+
 def update_examples_fn():
     examples = load_examples()
     examples = [[x] for x in examples]
     return gr.Dataset(samples=examples)
+
 
 def create_app() -> gr.Blocks:
     with gr.Blocks(title="STT Clipboard") as app:
@@ -81,7 +74,7 @@ def create_app() -> gr.Blocks:
                 input_threshold = gr.Slider(
                     minimum=0,
                     maximum=1,
-                    value=config.silero_vad_config.threshold,
+                    value=config.silero_vad_threshold,
                     step=0.01,
                     label="VAD 阈值",
                 )
@@ -138,8 +131,6 @@ def create_app() -> gr.Blocks:
 
 
 def main() -> None:
-    _init()
-
     with open("script.js", "r", encoding="utf-8") as f:
         SCRIPT = f.read()
     with open("style.css", "r", encoding="utf-8") as f:

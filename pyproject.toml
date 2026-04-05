@@ -7,7 +7,6 @@ requires-python = ">=3.13"
 dependencies = [
   "ruff",
   "gradio",
-  "faster-whisper",
   "silero-vad",
   "torch",
   "torchaudio",
@@ -16,15 +15,22 @@ dependencies = [
   "pyperclip",
   "torchcodec",
   "librosa",
+  "transformers>=5.5.0",
+  "pytest>=9.0.2",
+  "accelerate>=1.13.0",
 ]
 
-
 [[tool.uv.index]]
-name = "pytorch-cu128"
-url = "https://download.pytorch.org/whl/cu128"
+name = "pytorch-cu130"
+url = "https://download.pytorch.org/whl/cu130"
 explicit = true
 
 [tool.uv.sources]
-torch = [{ index = "pytorch-cu128" }]
-torchvision = [{ index = "pytorch-cu128" }]
-torchaudio = [{ index = "pytorch-cu128" }]
+torch = [{ index = "pytorch-cu130" }]
+torchvision = [{ index = "pytorch-cu130" }]
+torchaudio = [{ index = "pytorch-cu130" }]
+
+[tool.pytest]
+minversion = "9.0"
+addopts = ["-ra -q"]
+testpaths = ["pytests"]

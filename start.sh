@@ -1,1 +1,1 @@
-. .venv/Scripts/activate && python app.py
+. .venv/bin/activate && python app.py

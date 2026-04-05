@@ -1,25 +1,22 @@
 import logging
-from stt import FasterWhisperConfig
-from vad import SileroVADConfig
 import json
+
+
+LANGUAGES = ["auto", "zh", "ja", "en"]
 
 
 class Config:
     log_level = logging.INFO
 
+    model_name: str = "faster-whisper-large-v3-turbo"
     language: str = "zh"  # "auto" 表示自动推断
     # whisper 和 silero-vad 原生是 16kHz
-    samplerate = 16000
-    block_size = 1024
+    samplerate: int = 16000
+    block_size: int = 1024
+    device: str = "auto"  # ["auto", "cuda", "cpu"]
+    dtype: str = "float16"
 
-    faster_whisper_config = FasterWhisperConfig(
-        model_size_or_path="large-v3-turbo",
-        device="cuda",
-        compute_type="float16",  # "float32" for cpu
-        local_files_only=True,
-    )
-
-    silero_vad_config = SileroVADConfig(threshold=0.2)
+    silero_vad_threshold: float = 0.2
 
     host: str = "127.0.0.1"
     port: int = 7860
@@ -35,7 +32,6 @@ formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(messag
 console_handler.setFormatter(formatter)
 logger.addHandler(console_handler)
 
-LANGUAGES = ["auto", "zh", "ja", "en"]
 
 def load_examples():
     with open("examples.json", "r", encoding="utf-8") as f:
