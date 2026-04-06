@@ -18,6 +18,9 @@ dependencies = [
   "transformers>=5.5.0",
   "pytest>=9.0.2",
   "accelerate>=1.13.0",
+  "flash-attn-4",
+  "nagisa>=0.2.12",
+  "onnxruntime>=1.24.4",
 ]
 
 [[tool.uv.index]]
@@ -29,6 +32,7 @@ explicit = true
 torch = [{ index = "pytorch-cu130" }]
 torchvision = [{ index = "pytorch-cu130" }]
 torchaudio = [{ index = "pytorch-cu130" }]
+flash-attn-4 = { path = "downloads/wheels/flash_attn_4-4.0.0b5-py3-none-any.whl" }
 
 [tool.pytest]
 minversion = "9.0"

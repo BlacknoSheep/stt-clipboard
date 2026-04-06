@@ -18,10 +18,15 @@ class Transcriber:
     def switch_model(self, model_name: str):
         self.model_name = model_name
 
-        if self.model_name in ["faster-whisper", "faster-whisper-large-v3-turbo"]:
+        if self.model_name in ["whisper", "openai/whisper-large-v3-turbo"]:
             from src.whisper.model import Model, ModelConfig
 
-            config = ModelConfig(device=self.device)
+            config = ModelConfig(model_name=self.model_name, device=self.device)
+            self.model = Model(config)
+        elif self.model_name in ["cohere", "CohereLabs/cohere-transcribe-03-2026"]:
+            from src.cohere.model import Model, ModelConfig
+
+            config = ModelConfig(model_name=self.model_name, device=self.device)
             self.model = Model(config)
         else:
             raise ValueError(f"Unsupported model: {self.model_name}")

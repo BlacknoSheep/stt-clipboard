@@ -10,22 +10,26 @@
 
 ## 安装
 
-1. venv
+- venv
+
+下载 `https://github.com/Dao-AILab/flash-attention/releases/download/fa4-v4.0.0.beta7/flash_attn_4-4.0.0b7-py3-none-any.whl` 到 `downloads/wheels/`
 
 ```bash
 uv sync
 . .venv/Scripts/activate
 ```
 
-2. flash-attn (可选)
+- 安装 ffmpeg
 
-从`https://github.com/Dao-AILab/flash-attention/releases`下载预编译的 whl，然后安装
-
+```bash
+sudo add-apt-repository ppa:ubuntuhandbook1/ffmpeg8
+sudo apt update
+sudo apt install ffmpeg
 ```
-uv pip install /path/to/flash_attn...whl
-```
 
-3. stt 模型
+- 安装 [NVIDIA CUDA Toolkit](https://developer.nvidia.com/cuda-downloads)
+
+- 下载 stt 模型
 
 ```bash
 hf download openai/whisper-large-v3-turbo

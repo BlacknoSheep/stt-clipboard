@@ -8,3 +8,5 @@ downloads/
 .vscode/
 .ruff_cache/
 test/
+tmp/
+.env

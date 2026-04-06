@@ -8,7 +8,11 @@ LANGUAGES = ["auto", "zh", "ja", "en"]
 class Config:
     log_level = logging.INFO
 
-    model_name: str = "faster-whisper-large-v3-turbo"
+    # Supported models:
+    # openai/whisper-large-v3-turbo - 推荐，依然是目前性价比最高的
+    # CohereLabs/cohere-transcribe-03-2026
+    model_name: str = "openai/whisper-large-v3-turbo"
+
     language: str = "zh"  # "auto" 表示自动推断
     # whisper 和 silero-vad 原生是 16kHz
     samplerate: int = 16000
