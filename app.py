@@ -32,6 +32,7 @@ def process_audio(
         return ""
     audio = audio[timestamps[0][0] : timestamps[-1][1]]
     text = transcriber.transcribe(audio, language=language)
+    logger.info(text)
     if language == "zh":
         text = opencc.OpenCC("t2s").convert(text)
     copy_to_clipboard(text)

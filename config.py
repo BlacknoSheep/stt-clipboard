@@ -25,7 +25,7 @@ class Config:
 config = Config()
 
 logger = logging.getLogger("stt_clipboard")
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 console_handler = logging.StreamHandler()
 console_handler.setLevel(config.log_level)
 formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
