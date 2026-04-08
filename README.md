@@ -5,10 +5,12 @@
 ## 功能
 
 - 使用 **silero-vad** 自动去除静音片段，提升识别速度和准确性
-- 支持 **简体中文**、**繁体中文**、**日语**、**英语** 及自动检测
+- 支持语言取决于模型，目前做了 **简体中文**、**日语**、**英语** 3 个按钮
 - Gradio Web 界面，按钮大、适合 VR 操作
 
 ## 安装
+
+**Windows 用户请使用 wsl2**
 
 - venv
 
@@ -16,7 +18,7 @@
 
 ```bash
 uv sync
-. .venv/Scripts/activate
+. .venv/bin/activate
 ```
 
 - 安装 ffmpeg

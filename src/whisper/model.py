@@ -2,6 +2,7 @@ from transformers import WhisperProcessor, WhisperForConditionalGeneration
 import numpy as np
 from pydantic import BaseModel
 from typing import Optional
+import torch
 
 
 class ModelConfig(BaseModel):
@@ -32,6 +33,7 @@ class Model:
                 attn_implementation=config.attn_implementation,
             )
         )
+        self.model.eval()
 
     def transcribe(self, audio: np.ndarray, language: Optional[str] = None) -> str:
         inputs = self.processor(
@@ -42,7 +44,8 @@ class Model:
             for k, v in inputs.items()
         }
 
-        generated_ids = self.model.generate(**inputs, language=language)
+        with torch.inference_mode():
+            generated_ids = self.model.generate(**inputs, language=language)
         text = self.processor.batch_decode(generated_ids, skip_special_tokens=True)[0]
 
         for word in self.config.filter_words:

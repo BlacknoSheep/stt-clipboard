@@ -8,7 +8,7 @@ import torch
 class ModelConfig(BaseModel):
     model_name: str = "CohereLabs/cohere-transcribe-03-2026"
     device: str = "auto"
-    attn_implementation: Optional[str] = None # not support flash_attention_4 yet
+    attn_implementation: Optional[str] = None  # not support flash_attention_4 yet
     local_files_only: bool = True
     samplerate: int = 16000
 
@@ -30,6 +30,7 @@ class Model:
                 attn_implementation=config.attn_implementation,
             )
         )
+        self.model.eval()
 
     def transcribe(self, audio: np.ndarray, language: Optional[str] = "zh") -> str:
         if language is None:
@@ -41,7 +42,8 @@ class Model:
             language=language,
         ).to(self.model.device, dtype=self.model.dtype)
 
-        outputs = self.model.generate(**inputs, max_new_tokens=256)  # type: ignore
+        with torch.inference_mode():
+            outputs = self.model.generate(**inputs, max_new_tokens=256)  # type: ignore
         text = self.processor.decode(outputs, skip_special_tokens=True)[0].strip()
 
         return text
