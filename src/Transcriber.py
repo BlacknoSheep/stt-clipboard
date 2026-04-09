@@ -7,9 +7,12 @@ class Transcriber:
         self.model_name = model_name
         self.device = device
 
+        self.model = None
         self.model = self.switch_model(self.model_name)
 
     def transcribe(self, audio: np.ndarray, language: Optional[str] = None) -> str:
+        if self.model is None:
+            raise ValueError("Model is not loaded")
         if language == "auto":
             language = None
         text = self.model.transcribe(audio, language=language)
@@ -17,6 +20,10 @@ class Transcriber:
 
     def switch_model(self, model_name: str):
         self.model_name = model_name
+
+        if self.model:
+            del self.model
+            self.model = None
 
         if self.model_name in ["whisper", "openai/whisper-large-v3-turbo"]:
             self.model_name = "openai/whisper-large-v3-turbo"

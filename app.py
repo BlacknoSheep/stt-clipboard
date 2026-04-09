@@ -11,6 +11,8 @@ from src.vad import SileroVAD
 transcriber = Transcriber(model_name=config.model_name, device=config.device)
 vad_detector = SileroVAD()
 
+def switch_model(model_name: str):
+    transcriber.switch_model(model_name)
 
 def copy_text(text: str):
     if len(text) == 0:
@@ -91,6 +93,20 @@ def create_app() -> gr.Blocks:
                 )
 
                 update_examples = gr.Button(value="更新预制文本", variant="primary")
+
+                choose_model_progress = gr.Textbox(value="选择模型",show_label=False)
+                choose_model = gr.Dropdown(
+                    choices=config.available_models,
+                    value=config.model_name,
+                    show_label=False,
+                )
+
+                choose_model.change(
+                    fn=lambda model_name: switch_model(model_name),
+                    inputs=[choose_model],
+                    show_progress="full",
+                    show_progress_on=choose_model_progress,
+                )
 
             with gr.Column(elem_id="right-column"):
                 edit_text = gr.Textbox(
