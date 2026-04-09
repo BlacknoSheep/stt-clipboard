@@ -1,19 +1,21 @@
 import gradio as gr
-import pyperclip
 import numpy as np
 import opencc
 import librosa
 
 from config import config, logger, LANGUAGES, load_examples
 from src.Transcriber import Transcriber
+from src.utils import copy_to_clipboard, paste_from_clipboard
 from src.vad import SileroVAD
 
 transcriber = Transcriber(model_name=config.model_name, device=config.device)
 vad_detector = SileroVAD()
 
 
-def copy_to_clipboard(text: str):
-    pyperclip.copy(text)
+def copy_text(text: str):
+    if len(text) == 0:
+        return
+    copy_to_clipboard(text)
     gr.Info(f"已复制到剪贴板: {text}")
 
 
@@ -35,7 +37,7 @@ def process_audio(
     logger.info(text)
     if language == "zh":
         text = opencc.OpenCC("t2s").convert(text)
-    copy_to_clipboard(text)
+    copy_text(text)
     return text
 
 
@@ -55,7 +57,7 @@ def create_app() -> gr.Blocks:
                 )
 
                 copy_button = gr.Button(value="复制", variant="primary")
-                copy_button.click(fn=copy_to_clipboard, inputs=[stt_text])
+                copy_button.click(fn=copy_text, inputs=[stt_text])
 
                 input_audio = gr.Audio(
                     sources="microphone",
@@ -101,11 +103,11 @@ def create_app() -> gr.Blocks:
                     clear_button = gr.Button(value="清空", variant="primary")
 
                     copy_button.click(
-                        fn=lambda text: pyperclip.copy(text), inputs=[edit_text]
+                        fn=lambda text: copy_text(text), inputs=[edit_text]
                     )
 
                     paste_button.click(
-                        fn=lambda x: x + pyperclip.paste(),
+                        fn=lambda x: x + paste_from_clipboard(),
                         inputs=[edit_text],
                         outputs=[edit_text],
                     )
@@ -117,7 +119,7 @@ def create_app() -> gr.Blocks:
                     examples=load_examples(),
                     inputs=edit_text,
                     label="预制文本",
-                    fn=lambda x: copy_to_clipboard(x),
+                    fn=lambda x: copy_text(x),
                     run_on_click=True,
                     elem_id="examples",
                     examples_per_page=100,

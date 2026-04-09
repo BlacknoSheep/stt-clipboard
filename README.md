@@ -51,4 +51,4 @@ uv run app.py
 
 - 推荐配合 NVIDIA Broadcast 去噪使用。
 - 由于 Gradio 的录音实现问题，如果在录音的同时浏览器有音频在播放，会严重掉帧。
-- Qwen/Qwen3-ASR-1.7B 官方代码未适配 transformers 5.0+，在根据 https://github.com/QwenLM/Qwen3-ASR/pull/125，让 AI 修改后，虽然能跑了，但是中文识别效果很差，日语和英语正常。
+- Qwen/Qwen3-ASR-1.7B 官方代码未适配 transformers 5.0+，在根据 https://github.com/QwenLM/Qwen3-ASR/pull/125 ，让 AI 修改后，虽然能跑了，但是中文识别效果很差，日语和英语正常。
