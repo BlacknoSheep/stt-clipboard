@@ -19,6 +19,8 @@ class Transcriber:
         self.model_name = model_name
 
         if self.model_name in ["whisper", "openai/whisper-large-v3-turbo"]:
+            self.model_name = "openai/whisper-large-v3-turbo"
+            self.model_name = "openai/whisper-large-v3-turbo"
             from src.whisper.model import Model, ModelConfig
 
             config = ModelConfig(model_name=self.model_name, device=self.device)

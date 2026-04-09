@@ -7,6 +7,6 @@ downloads/
 .pytest_cache/
 .vscode/
 .ruff_cache/
-test/
 tmp/
 .env
+.opencode/

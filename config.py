@@ -9,9 +9,9 @@ class Config:
     log_level = logging.INFO
 
     # Supported models:
-    # openai/whisper-large-v3-turbo - 推荐，依然是目前性价比最高的
-    # CohereLabs/cohere-transcribe-03-2026
-    model_name: str = "openai/whisper-large-v3-turbo"
+    # openai/whisper-large-v3-turbo - 性价比最高，支持 auto，混合语言。
+    # CohereLabs/cohere-transcribe-03-2026 - 不支持 auto。
+    model_name: str = "CohereLabs/cohere-transcribe-03-2026"
 
     language: str = "zh"  # "auto" 表示自动推断
     # whisper 和 silero-vad 原生是 16kHz

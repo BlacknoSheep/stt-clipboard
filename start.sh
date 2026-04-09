@@ -1,1 +1,1 @@
-. .venv/bin/activate && python app.py
+uv run app.py

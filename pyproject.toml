@@ -36,5 +36,6 @@ flash-attn-4 = { path = "downloads/wheels/flash_attn_4-4.0.0b5-py3-none-any.whl"
 
 [tool.pytest]
 minversion = "9.0"
-addopts = ["-ra -q"]
+addopts = ["-s"]
 testpaths = ["pytests"]
+pythonpath = ["."]

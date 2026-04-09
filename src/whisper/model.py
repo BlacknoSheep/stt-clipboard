@@ -34,6 +34,7 @@ class Model:
             )
         )
         self.model.eval()
+        self.model = torch.compile(self.model) # type: ignore
 
     def transcribe(self, audio: np.ndarray, language: Optional[str] = None) -> str:
         inputs = self.processor(

@@ -15,10 +15,10 @@ class TestTranscribe:
         audio, sr = librosa.load(audio_path, sr=16000)
         return audio, sr
 
-    def test_faster_whisper(self, audio_data):
+    def test_whisper(self, audio_data):
         from src.Transcriber import Transcriber
 
         audio, sr = audio_data
-        transcrber = Transcriber(model_name="faster-whisper", device="cuda")
+        transcrber = Transcriber(model_name="whisper", device="cuda")
         text = transcrber.transcribe(audio, language="zh")
         print(f"Transcribed text: {text}")
