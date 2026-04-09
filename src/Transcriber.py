@@ -30,6 +30,14 @@ class Transcriber:
 
             config = ModelConfig(model_name=self.model_name, device=self.device)
             self.model = Model(config)
+        elif self.model_name in ["qwen", "qwen_asr", "Qwen/Qwen3-ASR-1.7B"]:
+            if self.model_name in ["qwen", "qwen_asr"]:
+                self.model_name = "Qwen/Qwen3-ASR-1.7B"
+
+            from src.qwen_asr.model import Model, ModelConfig
+
+            config = ModelConfig(model_name=self.model_name, device=self.device)
+            self.model = Model(config)
         else:
             raise ValueError(f"Unsupported model: {self.model_name}")
 

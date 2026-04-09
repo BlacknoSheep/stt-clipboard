@@ -9,8 +9,9 @@ class Config:
     log_level = logging.INFO
 
     # Supported models:
-    # openai/whisper-large-v3-turbo - 性价比最高，支持 auto，混合语言。
+    # openai/whisper-large-v3-turbo - 性价比最高，支持 auto，混合语言。但是容易幻觉。
     # CohereLabs/cohere-transcribe-03-2026 - 不支持 auto。
+    # Qwen/Qwen3-ASR-1.7B - 不支持 auto；中文效果很差，可能是适配问题。
     model_name: str = "CohereLabs/cohere-transcribe-03-2026"
 
     language: str = "zh"  # "auto" 表示自动推断
