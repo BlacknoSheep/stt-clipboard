@@ -7,18 +7,22 @@ from config import config, logger, LANGUAGES, load_examples
 from src.Transcriber import Transcriber
 from src.utils import copy_to_clipboard, paste_from_clipboard
 from src.vad import SileroVAD
+from src.vrchatosc import OSCClient
 
 transcriber = Transcriber(model_name=config.model_name, device=config.device)
 vad_detector = SileroVAD()
+osc_client = OSCClient(ip=config.osc_ip, port=config.osc_port)
+
 
 def switch_model(model_name: str):
     transcriber.switch_model(model_name)
+
 
 def copy_text(text: str):
     if len(text) == 0:
         return
     copy_to_clipboard(text)
-    gr.Info(f"已复制到剪贴板: {text}")
+    gr.Info(f"已复制到剪贴板: {text}", duration=1)
 
 
 def process_audio(
@@ -58,8 +62,12 @@ def create_app() -> gr.Blocks:
                     placeholder="(空)", show_label=False, elem_classes="text-box"
                 )
 
-                copy_button = gr.Button(value="复制", variant="primary")
-                copy_button.click(fn=copy_text, inputs=[stt_text])
+                with gr.Row():
+                    send_button = gr.Button(value="➤VRChat", variant="primary")
+                    copy_button = gr.Button(value="复制", variant="primary")
+
+                    send_button.click(fn=osc_client.chatbox_input, inputs=[stt_text])
+                    copy_button.click(fn=copy_text, inputs=[stt_text])
 
                 input_audio = gr.Audio(
                     sources="microphone",
@@ -94,7 +102,7 @@ def create_app() -> gr.Blocks:
 
                 update_examples = gr.Button(value="更新预制文本", variant="primary")
 
-                choose_model_progress = gr.Textbox(value="选择模型",show_label=False)
+                choose_model_progress = gr.Textbox(value="选择模型", show_label=False)
                 choose_model = gr.Dropdown(
                     choices=config.available_models,
                     value=config.model_name,
@@ -114,9 +122,12 @@ def create_app() -> gr.Blocks:
                 )
 
                 with gr.Row():
+                    send_button = gr.Button(value="➤VRChat", variant="primary")
                     copy_button = gr.Button(value="复制", variant="primary")
                     paste_button = gr.Button(value="粘贴", variant="primary")
                     clear_button = gr.Button(value="清空", variant="primary")
+
+                    send_button.click(fn=osc_client.chatbox_input, inputs=[edit_text])
 
                     copy_button.click(
                         fn=lambda text: copy_text(text), inputs=[edit_text]

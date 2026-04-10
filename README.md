@@ -10,9 +10,18 @@
 
 ## 安装
 
-**Windows 用户请使用 wsl2**
+- **wsl2**
 
-- venv
+由于依赖问题，建议使用 wsl2
+
+```ini
+# 开启 Mirrored mode，使得 wsl 和主机 localhost 互通
+# 主机中配置：C:\Users\你的用户名\.wslconfig
+[wsl2]
+networkingMode=mirrored
+```
+
+- **venv**
 
 下载 `https://github.com/Dao-AILab/flash-attention/releases/download/fa4-v4.0.0.beta7/flash_attn_4-4.0.0b7-py3-none-any.whl` 到 `downloads/wheels/`
 
@@ -21,7 +30,7 @@ uv sync
 . .venv/bin/activate
 ```
 
-- 安装 ffmpeg
+- **安装 ffmpeg**
 
 ```bash
 sudo add-apt-repository ppa:ubuntuhandbook1/ffmpeg8
@@ -29,9 +38,9 @@ sudo apt update
 sudo apt install ffmpeg
 ```
 
-- 安装 [NVIDIA CUDA Toolkit](https://developer.nvidia.com/cuda-downloads)
+- **安装 [NVIDIA CUDA Toolkit](https://developer.nvidia.com/cuda-downloads)**
 
-- 下载 stt 模型
+- **下载 stt 模型**
 
 ```bash
 hf download openai/whisper-large-v3-turbo

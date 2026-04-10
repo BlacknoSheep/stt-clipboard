@@ -3,8 +3,8 @@ from pydantic import BaseModel
 from typing import Optional
 import torch
 
-from src.qwen_asr import Qwen3ASRModel
-from src.qwen_asr.inference.utils import SUPPORTED_LANGUAGES
+from . import Qwen3ASRModel
+from .inference.utils import SUPPORTED_LANGUAGES
 
 
 _LANGUAGE_ALIASES = {
