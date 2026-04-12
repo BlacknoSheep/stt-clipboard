@@ -22,8 +22,13 @@ def copy_text(text: str):
     if len(text) == 0:
         return
     copy_to_clipboard(text)
-    gr.Info(f"已复制到剪贴板: {text}", duration=1)
+    gr.Info(f"Copied: {text}", duration=1)
 
+def send_to_vrchat(text: str):
+    if len(text) == 0:
+        return
+    osc_client.chatbox_input(text)
+    gr.Info(f"➤VRChat: {text}", duration=1)
 
 def process_audio(
     recording: tuple[int, np.ndarray], language: str, vad_threshold: float
@@ -66,7 +71,7 @@ def create_app() -> gr.Blocks:
                     send_button = gr.Button(value="➤VRChat", variant="primary")
                     copy_button = gr.Button(value="复制", variant="primary")
 
-                    send_button.click(fn=osc_client.chatbox_input, inputs=[stt_text])
+                    send_button.click(fn=send_to_vrchat, inputs=[stt_text])
                     copy_button.click(fn=copy_text, inputs=[stt_text])
 
                 input_audio = gr.Audio(
@@ -100,7 +105,7 @@ def create_app() -> gr.Blocks:
                     outputs=[stt_text],
                 )
 
-                update_examples = gr.Button(value="更新预制文本", variant="primary")
+                update_examples = gr.Button(value="刷新预制文本", variant="primary")
 
                 choose_model_progress = gr.Textbox(value="选择模型", show_label=False)
                 choose_model = gr.Dropdown(
@@ -127,7 +132,7 @@ def create_app() -> gr.Blocks:
                     paste_button = gr.Button(value="粘贴", variant="primary")
                     clear_button = gr.Button(value="清空", variant="primary")
 
-                    send_button.click(fn=osc_client.chatbox_input, inputs=[edit_text])
+                    send_button.click(fn=send_to_vrchat, inputs=[edit_text])
 
                     copy_button.click(
                         fn=lambda text: copy_text(text), inputs=[edit_text]
